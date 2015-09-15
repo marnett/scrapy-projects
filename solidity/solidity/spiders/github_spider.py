@@ -20,8 +20,9 @@ class SoliditySpider(scrapy.Spider):
             item['link'] = sel.xpath('a/@href').extract()
             yield item
 
-        for sel in response.xpath('//div[@class="pagination"]'):
-            item = SolidityItems()
-            url = sel.xpath('a[contains(text(), "Next")]/@href').extract()
-            print url
-            print response
+        item = SolidityItems()
+        url = response.xpath('//div[@class="pagination"]').xpath('a[contains(text(), "Next")]/@href').extract()
+        #print "THIS IS THE URL "  + str(url[0])
+        #print "THIS IS THE RESPONSE " + str(response)
+        url = "https://github.com" + str(url[0])
+        yield scrapy.Request(url, callback=self.parse)
