@@ -5,9 +5,10 @@ class SoliditySpider(scrapy.Spider):
     name = "solidity"
     allowed_domains = ["github.com", "raw.githubusercontent.com"]
     start_urls = [
-        #"https://github.com/search?utf8=%E2%9C%93&q=solidity"
-        #"https://github.com/blockapps/solidity-abi/tree/master/tests/success/mapping_declarations"
-        "https://github.com/search?utf8=%E2%9C%93&q=solidity-examples&type=Repositories&ref=searchresults"
+        "https://github.com/search?utf8=%E2%9C%93&q=solidity"
+        "https://github.com/search?utf8=%E2%9C%93&q=ethereum"
+        #TEST REPO: "https://github.com/blockapps/solidity-abi/tree/master/tests/success/mapping_declarations"
+        #TEST SEARCH: "https://github.com/search?utf8=%E2%9C%93&q=solidity-examples&type=Repositories&ref=searchresults"
     ]
 
     def parse(self, response):
@@ -50,21 +51,6 @@ class SoliditySpider(scrapy.Spider):
         savefile = urllib.URLopener()
         save_file_name = "contracts/" + hash + '.sol'
         savefile.retrieve(url, save_file_name)
-        f = open(save_file_name, 'r')
-        item['raw_code'] = f.read()
-        return item
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
+        #f = open(save_file_name, 'r')
+        #item['raw_code'] = f.read()
+        return item       
