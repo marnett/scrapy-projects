@@ -5,8 +5,9 @@ class SoliditySpider(scrapy.Spider):
     name = "solidity"
     allowed_domains = ["github.com", "raw.githubusercontent.com"]
     start_urls = [
-        #"https://github.com/search?utf8=%E2%9C%93&q=solidity",
-        "https://github.com/blockapps/solidity-abi/tree/master/tests/success/mapping_declarations"
+        #"https://github.com/search?utf8=%E2%9C%93&q=solidity"
+        #"https://github.com/blockapps/solidity-abi/tree/master/tests/success/mapping_declarations"
+        "https://github.com/search?utf8=%E2%9C%93&q=solidity-examples&type=Repositories&ref=searchresults"
     ]
 
     #def parase(self, response):
@@ -15,7 +16,7 @@ class SoliditySpider(scrapy.Spider):
 
         #yield scrapy.Request(url, callback = self.parse_page)
 
-    '''def parse(self, response):
+    def parse(self, response):
         for sel in response.xpath('//ul/li/h3'):
             item = SolidityItems()
             link = sel.xpath('a/@href').extract()
@@ -31,9 +32,8 @@ class SoliditySpider(scrapy.Spider):
         #print "THIS IS THE RESPONSE " + str(response)
         url = "https://github.com" + str(url[0])
         yield scrapy.Request(url, callback=self.parse)
-    '''
 
-    def parse(self, response):
+    def parse_repo(self, response):
         #print "THIS IS THE RESPOSNE" + str(response)
         for sel in response.xpath('//table/tbody/tr/td[@class="content"]/span'):
             item = SolidityItems()
@@ -42,7 +42,7 @@ class SoliditySpider(scrapy.Spider):
             url = "https://github.com" + str(link[0])
             if ".sol" in url:
                 yield scrapy.Request(url, callback=self.parse_raw)
-            yield scrapy.Request(url, callback=self.parse)
+            yield scrapy.Request(url, callback=self.parse_repo)
 
     def parse_raw(self, response):
         link = response.xpath('//div[@class="file-actions"]/div[@class="btn-group"]').xpath('a[contains(text(), "Raw")]/@href').extract()
@@ -69,3 +69,4 @@ class SoliditySpider(scrapy.Spider):
 
 
 
+        
