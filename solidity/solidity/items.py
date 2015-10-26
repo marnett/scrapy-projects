@@ -9,7 +9,7 @@ import scrapy
 
 
 class SolidityItems(scrapy.Item):
-    file_url = scrapy.Field()
-    repo_url = scrapy.Field()
+    raw_url = scrapy.Field()
     hash = scrapy.Field()
     contract_name = scrapy.Field()
+    raw_code = scrapy.Field()
