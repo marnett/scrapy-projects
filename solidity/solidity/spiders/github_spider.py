@@ -7,8 +7,11 @@ class SoliditySpider(scrapy.Spider):
     start_urls = [
         "https://github.com/search?utf8=%E2%9C%93&q=solidity"
         "https://github.com/search?utf8=%E2%9C%93&q=ethereum"
-        #TEST REPO: "https://github.com/blockapps/solidity-abi/tree/master/tests/success/mapping_declarations"
-        #TEST SEARCH: "https://github.com/search?utf8=%E2%9C%93&q=solidity-examples&type=Repositories&ref=searchresults"
+        "https://github.com/search?utf8=%E2%9C%93&q=serpent"
+        #TEST REPO SOL: "https://github.com/blockapps/solidity-abi/tree/master/tests/success/mapping_declarations"
+        #TEST SEARCH SOL: "https://github.com/search?utf8=%E2%9C%93&q=solidity-examples&type=Repositories&ref=searchresults"
+        #TEST SEARCH SE:
+        "https://github.com/search?l=Python&q=ethereum+contracts&ref=searchresults&type=Repositories&utf8=%E2%9C%93"
     ]
 
     def parse(self, response):
@@ -26,7 +29,7 @@ class SoliditySpider(scrapy.Spider):
         for sel in response.xpath('//table/tbody/tr/td[@class="content"]/span'):
             url = sel.xpath('a/@href').extract()
             url = "https://github.com" + str(url[0])
-            if ".sol" in url:
+            if ".sol" in url or ".se" in url:
                 yield scrapy.Request(url, callback=self.parse_raw)
             yield scrapy.Request(url, callback=self.parse_repo)
 
@@ -49,7 +52,10 @@ class SoliditySpider(scrapy.Spider):
         item['hash'] = hash
 
         savefile = urllib.URLopener()
-        save_file_name = "contracts/" + hash + '.sol'
+        if ".sol" in filename:
+            save_file_name = "contracts/" + hash + '.sol'
+        else:
+            save_file_name = "contracts/" + hash + '.se'
         savefile.retrieve(url, save_file_name)
         #f = open(save_file_name, 'r')
         #item['raw_code'] = f.read()
